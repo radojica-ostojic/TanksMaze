@@ -1,0 +1,68 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#info {
+  position: relative;
+  top: 300px;
+  line-height: 9px;
+  color: white;
+  font-family: igrica;
+}
+canvas {
+  width: 650px;
+  height: 650px;
+  display: none;
+}
+#canvas {
+  border: 0;
+  width: 650px;
+  height: 650px;
+  background-color: black;
+  margin-left: auto;
+  margin-right: auto;
+}
+@font-face {
+  font-family: igrica;
+  src: url(ARCADECLASSIC.TTF);
+}
+p {
+  font-family: igrica;
+  font-size: 90px;
+  color: white;
+  position: relative;
+  top: 120px;
+  margin-top: 0;
+}
+#btn {
+  font-family: igrica;
+  font-size: 50px;
+  background-color: transparent;
+  border-color: transparent;
+  color: white;
+  position: relative;
+  top: 150px;
+  transition: background-color 1s;
+  border-radius: 10px;
+}
+
+#btn:hover {
+  cursor: pointer;
+  background-color: grey;
+  border-radius: 10px;
+}
+#mainPage {
+  background: #000;
+  width: 650px;
+  height: 650px;
+  margin-left: auto;
+  margin-right: auto;
+}
+body {
+  text-align: center;
+  padding: 10px;
+}
+
+

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+    <div id="canvasDiv"></div>
+    <div id="mainPage">
+        <p id="gameTitle">Tank's maze</p>
+        <button id="btn" onclick="init(); this.disabled=true;">Start game</button>
+        <div id="info">
+        ↑↓←→ : Tank Move , space : attack<br><br>
+        Click the image when the keyboard can not be operated
+        
+        </div>
+        <audio id="audio">
+            <source src="https://hankuro.sakura.ne.jp/audio/cannon1.mp3" type="audio/mp3">
+        </audio>
+        <audio id="audioBomb">
+            <source src="https://hankuro.sakura.ne.jp/audio/bomb2.mp3" type="audio/mp3">
+        </audio>
+        <script src="script.js"></script>
+    </div>
+    <canvas id="canvas" ></canvas>
+    <!-- Following div is used for first appear of tanks -->
+    <div >
+        <img src="pictures/playerright.png" style="display: none;" id="slika" width="30" height="30"  alt="">
+        <img src="pictures/enemyleft.png" style="display: none;" id="slika2" width="30" height="30"  alt="" loading="eager">
+    </div>
+    
+    
+    
+</body>
+
+</html>
