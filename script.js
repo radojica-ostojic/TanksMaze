@@ -7,8 +7,7 @@ const TANKHEIGHT = 30;
 
 
 
-var slika = document.getElementById("slika");
-var slika2 = document.getElementById("slika2"); 
+var pitcurestyle = document.getElementById("pitcurestyle"); 
 // hiding starting page
 function hiding() {
   var x = document.getElementById("btn");
@@ -53,14 +52,11 @@ function init() {
 
   gamescreen.clearRect(0, 0, canvas.width, canvas.height);
 
-  var apperance = document.getElementById('slika');
+  var apperance = document.getElementById('pitcurestyle');
   apperance.style.visibility = 'visible';
-  var apperance = document.getElementById('slika2');
-  apperance.style.visibility = 'visible';
-
-  
   
 
+  
   canvas.style.display = "block";
   gamescreen.drawImage(playerright, 0, 0, TANKWIDTH, TANKHEIGHT);
   gamescreen.drawImage(enemyleft, 350, 350, TANKWIDTH, TANKHEIGHT);
