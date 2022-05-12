@@ -19,60 +19,33 @@ function hiding() {
   y.style.display = "none";
   z.style.display = "none";
 }
+//global varible declaration
+var playerPosX = 10;
+var playerPosY = 10;
+var playerPosition = 1;
+var enemyPosition = 1;
+var enemyPosX = 350;
+var enemyPosY = 350;
+var canvas;
+var gamescreen;
+var playerright = new Image();
+var playerdown = new Image();
+var playerleft = new Image();
+var playerup = new Image();
+var enemyright = new Image();
+var enemydown = new Image();
+var enemyleft = new Image();
+var enemyup = new Image();
+var prevTime = new Date().getTime();
 
-// canvas creation
+function moveit(e){
+    var now = new Date().getTime();
 
-function init() {
-  hiding();
-  var canvas = document.getElementById("canvas");
-  var gamescreen = canvas.getContext("2d");
-  window.document.addEventListener('keydown', moveit, true);
-  canvas.width = 650;
-  canvas.height = 650;
+    if((now - prevTime) < 600)
+        return;
+    
+    prevTime = now;
 
-
-  var playerright= new Image();
-  playerright.src= 'pictures/playerright.png';
-  var playerdown= new Image();
-  playerdown.src= 'pictures/playerdown.png';
-  var playerleft= new Image();
-  playerleft.src= 'pictures/playerleft.png';
-  var playerup= new Image();
-  playerup.src= 'pictures/palyerup.png';
-  
-  var enemyright= new Image();
-  enemyright.src= 'pictures/enemyright.png';
-  var enemydown= new Image();
-  enemydown.src= 'pictures/enemydown.png';
-  var enemyleft= new Image();
-  enemyleft.src= 'pictures/enemyleft.png';
-  var enemyup= new Image();
-  enemyup.src= 'pictures/enemyup.png';
-
-
-  gamescreen.clearRect(0, 0, canvas.width, canvas.height);
-
-  var apperance = document.getElementById('pitcurestyle');
-  apperance.style.visibility = 'visible';
-  
-
-  
-  canvas.style.display = "block";
-  gamescreen.drawImage(playerright, 0, 0, TANKWIDTH, TANKHEIGHT);
-  gamescreen.drawImage(enemyleft, 350, 350, TANKWIDTH, TANKHEIGHT);
-  
-
-  var playerPosX = 0;
-  var playerPosY = 0;
-  var playerPosition = 1;
-  var enemyPosition = 1;
-  var enemyPosX = 350;
-  var enemyPosY = 350;
-
-
-//   function for moving tank
-
-  function moveit(e){
     //   player movement after click on down arrow
     if(e.keyCode == ARROWDOWN){
         gamescreen.clearRect(0, 0, canvas.width, canvas.height);
@@ -137,39 +110,90 @@ function init() {
     }
     redrawEnemy();
 }
-    gamescreen.drawImage(enemyright, enemyPosX, enemyPosY, TANKWIDTH, TANKHEIGHT);
+
+
+
+
+
+
+// canvas creation
+
+function init() {
+  hiding();
+  canvas = document.getElementById("canvas");
+  gamescreen = canvas.getContext("2d");
+  window.document.addEventListener('keydown', moveit, true);
+  canvas.width = 650;
+  canvas.height = 650;
+
+
+
+  playerright.src = 'pictures/playerright.png';
+  playerdown.src = 'pictures/playerdown.png';
+  playerleft.src = 'pictures/playerleft.png';
+  playerup.src = 'pictures/palyerup.png';
+  
+  enemyright.src = 'pictures/enemyright.png';
+  enemydown.src = 'pictures/enemydown.png';
+  enemyleft.src = 'pictures/enemyleft.png';
+  enemyup.src = 'pictures/enemyup.png';
+
+
+  gamescreen.clearRect(0, 0, canvas.width, canvas.height);
+
+  var apperance = document.getElementById('pitcurestyle');
+  apperance.style.visibility = 'visible';
+  
+
+  
+  canvas.style.display = "block";
+  gamescreen.drawImage(playerright, 10, 10, TANKWIDTH, TANKHEIGHT);
+  gamescreen.drawImage(enemyleft, 350, 350, TANKWIDTH, TANKHEIGHT);
+  
+
+ 
+
+
+//   function for moving tank
+
+  
+    
     setInterval(enemyMovement, 600);
+   
+
+    
+    
+    
+
+
+}
+  
+
+function redrawPlayer(){
+    console.log("values from first function:  ", enemyPosX); //
+    if(playerPosition == 1)
+        this.gamescreen.drawImage(playerright, playerPosX, playerPosY, TANKWIDTH, TANKHEIGHT);
+    else if(playerPosition == 2)
+        this.gamescreen.drawImage(playerdown, playerPosX, playerPosY, TANKWIDTH, TANKHEIGHT);
+    else if(playerPosition == 3)
+        this.gamescreen.drawImage(playerleft, playerPosX, playerPosY, TANKWIDTH, TANKHEIGHT);
+    else if(playerPosition == 4)
+        this.gamescreen.drawImage(playerup, playerPosX, playerPosY, TANKWIDTH, TANKHEIGHT);
+}
+
+function redrawEnemy(){
+    if(enemyPosition == 1)
+        gamescreen.drawImage(enemyright, enemyPosX, enemyPosY, TANKWIDTH, TANKHEIGHT);
+    else if(enemyPosition == 2)
+        gamescreen.drawImage(enemydown, enemyPosX, enemyPosY, TANKWIDTH, TANKHEIGHT);
+    else if(enemyPosition == 3)
+        gamescreen.drawImage(enemyleft, enemyPosX, enemyPosY, TANKWIDTH, TANKHEIGHT);
+    else if(enemyPosition == 4)
+        gamescreen.drawImage(enemyup, enemyPosX, enemyPosY, TANKWIDTH, TANKHEIGHT);
+    }
+
     function enemyMovement() {
         enemyPosition = Math.floor(Math.random()*4)+1;
-        
-
-
-        // enemy movement using only if
-        // if(enemyPosition == 1){
-        //     gamescreen.clearRect(0, 0, canvas.width, canvas.height);
-        //     enemyPosX += 10;
-        //     gamescreen.drawImage(enemyright, enemyPosX, enemyPosY, TANKWIDTH, TANKHEIGHT);
-        //     console.log("enemy right");
-        // }
-        // else if(enemyPosition == 2){
-        //     gamescreen.clearRect(0, 0, canvas.width, canvas.height);
-        //     enemyPosY += 10;
-        //     gamescreen.drawImage(enemydown, enemyPosX, enemyPosY, TANKWIDTH, TANKHEIGHT);
-        //     console.log("enemy down");
-        // }
-        // else if(enemyPosition == 3){
-        //     gamescreen.clearRect(0, 0, canvas.width, canvas.height);
-        //     enemyPosX -= 10;
-        //     gamescreen.drawImage(enemyleft, enemyPosX, enemyPosY, TANKWIDTH, TANKHEIGHT);
-        //     console.log("enemy left");
-        // }
-        // else if(enemyPosition == 4){
-        //     gamescreen.clearRect(0, 0, canvas.width, canvas.height);
-        //     enemyPosY -= 10;
-        //     gamescreen.drawImage(enemyup, enemyPosX, enemyPosY, TANKWIDTH, TANKHEIGHT);
-        //     console.log("enemy up");
-        // }  
-
         // enemy movement using switch with if
         switch (enemyPosition) {
             // enemy movement or rotation right
@@ -233,32 +257,3 @@ function init() {
         redrawPlayer();
                                               
     }
-
-    function redrawEnemy(){
-    if(enemyPosition == 1)
-        gamescreen.drawImage(enemyright, enemyPosX, enemyPosY, TANKWIDTH, TANKHEIGHT);
-    else if(enemyPosition == 2)
-        gamescreen.drawImage(enemydown, enemyPosX, enemyPosY, TANKWIDTH, TANKHEIGHT);
-    else if(enemyPosition == 3)
-        gamescreen.drawImage(enemyleft, enemyPosX, enemyPosY, TANKWIDTH, TANKHEIGHT);
-    else if(enemyPosition == 4)
-        gamescreen.drawImage(enemyup, enemyPosX, enemyPosY, TANKWIDTH, TANKHEIGHT);
-    }
-    
-    function redrawPlayer(){
-        if(playerPosition == 1)
-            gamescreen.drawImage(playerright, playerPosX, playerPosY, TANKWIDTH, TANKHEIGHT);
-        else if(playerPosition == 2)
-            gamescreen.drawImage(playerdown, playerPosX, playerPosY, TANKWIDTH, TANKHEIGHT);
-        else if(playerPosition == 3)
-            gamescreen.drawImage(playerleft, playerPosX, playerPosY, TANKWIDTH, TANKHEIGHT);
-        else if(playerPosition == 4)
-            gamescreen.drawImage(playerup, playerPosX, playerPosY, TANKWIDTH, TANKHEIGHT);
-    }
-
-
-}
-  
-
-  
-
