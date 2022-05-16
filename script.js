@@ -20,8 +20,8 @@ function hiding() {
   z.style.display = "none";
 }
 //global varible declaration
-var playerPosX = 10;
-var playerPosY = 10;
+var playerPosX = 1;
+var playerPosY = 1;
 var playerPosition = 1;
 var enemyPosition = 1;
 var enemyPosX = 350;
@@ -37,12 +37,34 @@ var enemydown = new Image();
 var enemyleft = new Image();
 var enemyup = new Image();
 var prevTime = new Date().getTime();
+var gameBorders = [[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1], 
+                    [-1, 1, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1],
+                    [-1, 0, -1, -1, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, -1, 0, -1, -1, -1, 0, -1], 
+                    [-1, 0, 0, 0, -1, 0, -1, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, -1, 0, 0, -1],
+                    [-1, 0, -1, 0, -1, 0, 0, 0, 0, -1, -1, 0, -1, 0, -1, -1, -1, -1, -1, 0, 0, -1],
+                    [-1, 0, -1, 0, -1, 0, -1, -1, 0, -1, 0, 0, -1, 0, 0, 0, 0, 0, -1, 0, 0, -1], 
+                    [-1, 0, -1, 0, -1, 0, -1, 0, 0, -1, 0, -1, -1, -1, -1, -1, -1, 0, -1, 0, 0, -1],
+                    [-1, 0, -1, 0, 0, 0, -1, 0, -1, -1, -1, -1, 0, 0, 0, 0, 0, 0, -1, -1, -1, -1],
+                    [-1, 0, 0, 0, 0, -1, -1, 0, -1, 0, 0, 0, 0, -1, -1, -1, -1, 0, -1, 0, 0, -1], 
+                    [-1, -1, 0, -1, 0, -1, 0, 0, 0, 0, -1, -1, 0, -1, 0, 0, -1, 0, -1, -1, 0, -1],
+                    [-1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, -1, -1, 0, 0, 0, -1, 0, -1],
+                    [-1, 0, 0, -1, 0, -1, 0, -1, 0, -1, -1, -1, 0, 0, 0, 0, 0, -1, -1, -1, 0, -1], 
+                    [-1, 0, -1, -1, -1, -1, -1, -1, 0, 0, 0, 0, 0, -1, -1, 0, -1, -1, 0, 0, 0, -1],
+                    [-1, 0, -1, 0, 0, 0, -1, 0, 0, -1, -1, -1, -1, -1, 0, 0, -1, 0, 0, -1, 0, -1],
+                    [-1, 0, -1, 0, -1, 0, -1, 0, -1, -1, 0, 0, 0, 0, 0, -1, -1, -1, -1, -1, 0, -1], 
+                    [-1, 0, -1, 0, -1, 0, -1, 0, -1, 0, 0, -1, -1, -1, 0, 0, -1, 0, 0, -1, 0, -1],
+                    [-1, 0, 0, 0, -1, 0, 0, 0, 0, 0, -1, -1, 0, -1, -1, 0, -1, 0, -1, -1, 0, -1],
+                    [-1, 0, -1, 0, -1, -1, -1, -1, -1, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, -1], 
+                    [-1, 0, -1, 0, -1, 0, 0, 0, -1, -1, -1, 0, -1, -1, -1, 0, 0, 0, 0, 0, 0, -1],
+                    [-1, 0, 0, 0, -1, 0, -1, -1, -1, 0, 0, 0, 0, -1, 0, 0, -1, -1, -1, 0, 0, -1],
+                    [-1, 0, -1, -1, -1, 0, 0, 0, 0, 0, -1, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1], 
+                    [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]];
 
 function moveit(e){
     var now = new Date().getTime();
 
-    if((now - prevTime) < 600)
-        return;
+    if((now - prevTime) < 300)
+        return; 
     
     prevTime = now;
 
@@ -50,13 +72,15 @@ function moveit(e){
     if(e.keyCode == ARROWDOWN){
         gamescreen.clearRect(0, 0, canvas.width, canvas.height);
 
-        if(playerPosY+30 < canvas.height){
-            playerPosY += 10;
-            gamescreen.drawImage(playerdown, playerPosX, playerPosY, TANKWIDTH, TANKHEIGHT);        
+        if((gameBorders[playerPosX][playerPosY+1]) != -1){
+            gameBorders[playerPosX][playerPosY] = 0;
+            playerPosY++;
+            gameBorders[playerPosX][playerPosY] = 1;
+            gamescreen.drawImage(playerdown, playerPosX*30, playerPosY*30, TANKWIDTH, TANKHEIGHT);        
             console.log("player down");
         }
         else{
-            gamescreen.drawImage(playerdown, playerPosX, playerPosY, TANKWIDTH, TANKHEIGHT);        
+            gamescreen.drawImage(playerdown, playerPosX*30, playerPosY*30, TANKWIDTH, TANKHEIGHT);        
             console.log("player rotate down");
         }   
         playerPosition = 2;
@@ -109,6 +133,7 @@ function moveit(e){
         playerPosition = 1;
     }
     redrawEnemy();
+    obstacleDrawing();
 }
 
 
@@ -123,8 +148,8 @@ function init() {
   canvas = document.getElementById("canvas");
   gamescreen = canvas.getContext("2d");
   window.document.addEventListener('keydown', moveit, true);
-  canvas.width = 650;
-  canvas.height = 650;
+  canvas.width = 660;
+  canvas.height = 660;
 
 
 
@@ -144,41 +169,25 @@ function init() {
   var apperance = document.getElementById('pitcurestyle');
   apperance.style.visibility = 'visible';
   
-
-  
   canvas.style.display = "block";
-  gamescreen.drawImage(playerright, 10, 10, TANKWIDTH, TANKHEIGHT);
+  gamescreen.drawImage(playerright, playerPosX*30, playerPosY*30, TANKWIDTH, TANKHEIGHT);
   gamescreen.drawImage(enemyleft, 350, 350, TANKWIDTH, TANKHEIGHT);
-  
+  obstacleDrawing();
 
- 
-
-
-//   function for moving tank
-
-  
-    
-    setInterval(enemyMovement, 600);
-   
-
-    
-    
-    
-
-
+//   function for moving enemy tank    
+  setInterval(enemyMovement, 300);
 }
   
 
 function redrawPlayer(){
-    console.log("values from first function:  ", enemyPosX); //
     if(playerPosition == 1)
-        this.gamescreen.drawImage(playerright, playerPosX, playerPosY, TANKWIDTH, TANKHEIGHT);
+        this.gamescreen.drawImage(playerright, playerPosX*30, playerPosY*30, TANKWIDTH, TANKHEIGHT);
     else if(playerPosition == 2)
-        this.gamescreen.drawImage(playerdown, playerPosX, playerPosY, TANKWIDTH, TANKHEIGHT);
+        this.gamescreen.drawImage(playerdown, playerPosX*30, playerPosY*30, TANKWIDTH, TANKHEIGHT);
     else if(playerPosition == 3)
-        this.gamescreen.drawImage(playerleft, playerPosX, playerPosY, TANKWIDTH, TANKHEIGHT);
+        this.gamescreen.drawImage(playerleft, playerPosX*30, playerPosY*30, TANKWIDTH, TANKHEIGHT);
     else if(playerPosition == 4)
-        this.gamescreen.drawImage(playerup, playerPosX, playerPosY, TANKWIDTH, TANKHEIGHT);
+        this.gamescreen.drawImage(playerup, playerPosX*30, playerPosY*30, TANKWIDTH, TANKHEIGHT);
 }
 
 function redrawEnemy(){
@@ -255,5 +264,20 @@ function redrawEnemy(){
         }
         
         redrawPlayer();
+        obstacleDrawing();
                                               
     }
+function obstacleDrawing(){
+    for (let indexI = 0; indexI < gameBorders.length; indexI++) {
+        var gameBorder = gameBorders[indexI];
+        for (let indexJ = 0; indexJ < gameBorder.length; indexJ++) {
+            if(gameBorders[indexI][indexJ] === -1){
+                let arrayWidth = indexI * 30;
+                let arrayHeight = indexJ * 30;
+                gamescreen.fillStyle = "#804000";
+                gamescreen.fillRect(arrayHeight, arrayWidth, TANKHEIGHT, TANKWIDTH);
+            }
+                
+        }
+    }
+}
