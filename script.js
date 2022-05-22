@@ -24,8 +24,8 @@ var playerPosX = 1;
 var playerPosY = 1;
 var playerPosition = 1;
 var enemyPosition = 1;
-var enemyPosX = 350;
-var enemyPosY = 350;
+var enemyPosX = 18;
+var enemyPosY = 6;
 var canvas;
 var gamescreen;
 var playerright = new Image();
@@ -55,7 +55,7 @@ var gameBorders = [[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 
                     [-1, 0, -1, 0, -1, 0, -1, 0, -1, 0, 0, -1, -1, -1, 0, 0, -1, 0, 0, -1, 0, -1],
                     [-1, 0, 0, 0, -1, 0, 0, 0, 0, 0, -1, -1, 0, -1, -1, 0, -1, 0, -1, -1, 0, -1],
                     [-1, 0, -1, 0, -1, -1, -1, -1, -1, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, -1], 
-                    [-1, 0, -1, 0, -1, 0, 0, 0, -1, -1, -1, 0, -1, -1, -1, 0, 0, 0, 0, 0, 0, -1],
+                    [-1, 0, -1, 0, -1, 0, 2, 0, -1, -1, -1, 0, -1, -1, -1, 0, 0, 0, 0, 0, 0, -1],
                     [-1, 0, 0, 0, -1, 0, -1, -1, -1, 0, 0, 0, 0, -1, 0, 0, -1, -1, -1, 0, 0, -1],
                     [-1, 0, -1, -1, -1, 0, 0, 0, 0, 0, -1, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1], 
                     [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]];
@@ -63,7 +63,7 @@ var gameBorders = [[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 
 function moveit(e){
     var now = new Date().getTime();
 
-    if((now - prevTime) < 300)
+    if((now - prevTime) < 200)
         return; 
     
     prevTime = now;
@@ -72,64 +72,74 @@ function moveit(e){
     if(e.keyCode == ARROWDOWN){
         gamescreen.clearRect(0, 0, canvas.width, canvas.height);
 
-        if((gameBorders[playerPosX][playerPosY+1]) != -1){
+        if((gameBorders[playerPosX+1][playerPosY]) != -1){
             gameBorders[playerPosX][playerPosY] = 0;
-            playerPosY++;
+            playerPosX++;
             gameBorders[playerPosX][playerPosY] = 1;
-            gamescreen.drawImage(playerdown, playerPosX*30, playerPosY*30, TANKWIDTH, TANKHEIGHT);        
+            gamescreen.drawImage(playerdown, playerPosY*30, playerPosX*30, TANKWIDTH, TANKHEIGHT);        
             console.log("player down");
+            console.log(" vrednost x: ", playerPosX, "  Vredonst y: ", playerPosY);
         }
         else{
-            gamescreen.drawImage(playerdown, playerPosX*30, playerPosY*30, TANKWIDTH, TANKHEIGHT);        
+            gamescreen.drawImage(playerdown, playerPosY*30, playerPosX*30, TANKWIDTH, TANKHEIGHT);        
             console.log("player rotate down");
         }   
         playerPosition = 2;
     }
-    // player movement after click on right arrow
+    // player movement after click on left arrow
     if(e.keyCode == ARROWLEFT){
         gamescreen.clearRect(0, 0, canvas.width, canvas.height);
         
-        if(playerPosX-10 >= 0){   
-            playerPosX -= 10;
-            gamescreen.drawImage(playerleft, playerPosX, playerPosY, TANKWIDTH, TANKHEIGHT);
+        if((gameBorders[playerPosX][playerPosY-1]) != -1){
+            gameBorders[playerPosX][playerPosY] = 0;
+            playerPosY--;
+            gameBorders[playerPosX][playerPosY] = 1;
+            gamescreen.drawImage(playerleft, playerPosY*30, playerPosX*30, TANKWIDTH, TANKHEIGHT);        
             console.log("player left");
+            console.log(" vrednost x: ", playerPosX, "  Vredonst y: ", playerPosY);
         }
         else{
-            gamescreen.drawImage(playerleft, playerPosX, playerPosY, TANKWIDTH, TANKHEIGHT);
+            gamescreen.drawImage(playerleft, playerPosY*30, playerPosX*30, TANKWIDTH, TANKHEIGHT);        
             console.log("player rotate left");
-        }
+        } 
+
+
         playerPosition = 3;
     }
     // player movement after click on up arrow
     if(e.keyCode == ARROWUP){
         gamescreen.clearRect(0, 0, canvas.width, canvas.height);
             
-        if(playerPosY-10 >= 0){
-            // put it in front of IF so that tank would rotate if it is in the top
-            // igra.clearRect(0, 0, canvas.width, canvas.height);
-            playerPosY -= 10;
-            gamescreen.drawImage(playerup, playerPosX, playerPosY, TANKWIDTH, TANKHEIGHT);
+        if((gameBorders[playerPosX-1][playerPosY]) != -1){
+            gameBorders[playerPosX][playerPosY] = 0;
+            playerPosX--;
+            gameBorders[playerPosX][playerPosY] = 1;
+            gamescreen.drawImage(playerup, playerPosY*30, playerPosX*30, TANKWIDTH, TANKHEIGHT);        
             console.log("player up");
+            console.log(" vrednost x: ", playerPosX, "  Vredonst y: ", playerPosY);
         }
         else{
-            gamescreen.drawImage(playerup, playerPosX, playerPosY, TANKWIDTH, TANKHEIGHT);
+            gamescreen.drawImage(playerup, playerPosY*30, playerPosX*30, TANKWIDTH, TANKHEIGHT);        
             console.log("player rotate up");
-        }
+        } 
         playerPosition = 4;
     }
     // player movement after click on right arrow
     if(e.keyCode == ARROWRIGHT){
         gamescreen.clearRect(0, 0, canvas.width, canvas.height);
 
-        if(playerPosX+30 < canvas.width){
-            playerPosX += 10;
-            gamescreen.drawImage(playerright, playerPosX, playerPosY, TANKWIDTH, TANKHEIGHT);
+        if((gameBorders[playerPosX][playerPosY+1]) != -1){
+            gameBorders[playerPosX][playerPosY] = 0;
+            playerPosY++;
+            gameBorders[playerPosX][playerPosY] = 1;
+            gamescreen.drawImage(playerright, playerPosY*30, playerPosX*30, TANKWIDTH, TANKHEIGHT);        
             console.log("player right");
+            console.log(" vrednost x: ", playerPosX, "  Vredonst y: ", playerPosY);
         }
         else{
-            gamescreen.drawImage(playerright, playerPosX, playerPosY, TANKWIDTH, TANKHEIGHT);
+            gamescreen.drawImage(playerright, playerPosY*30, playerPosX*30, TANKWIDTH, TANKHEIGHT);        
             console.log("player rotate right");
-        }
+        } 
         playerPosition = 1;
     }
     redrawEnemy();
@@ -171,7 +181,7 @@ function init() {
   
   canvas.style.display = "block";
   gamescreen.drawImage(playerright, playerPosX*30, playerPosY*30, TANKWIDTH, TANKHEIGHT);
-  gamescreen.drawImage(enemyleft, 350, 350, TANKWIDTH, TANKHEIGHT);
+  gamescreen.drawImage(enemyleft, enemyPosY*30, enemyPosX*30, TANKWIDTH, TANKHEIGHT);
   obstacleDrawing();
 
 //   function for moving enemy tank    
@@ -181,24 +191,24 @@ function init() {
 
 function redrawPlayer(){
     if(playerPosition == 1)
-        this.gamescreen.drawImage(playerright, playerPosX*30, playerPosY*30, TANKWIDTH, TANKHEIGHT);
+        this.gamescreen.drawImage(playerright, playerPosY*30, playerPosX*30, TANKWIDTH, TANKHEIGHT);
     else if(playerPosition == 2)
-        this.gamescreen.drawImage(playerdown, playerPosX*30, playerPosY*30, TANKWIDTH, TANKHEIGHT);
+        this.gamescreen.drawImage(playerdown, playerPosY*30, playerPosX*30, TANKWIDTH, TANKHEIGHT);
     else if(playerPosition == 3)
-        this.gamescreen.drawImage(playerleft, playerPosX*30, playerPosY*30, TANKWIDTH, TANKHEIGHT);
+        this.gamescreen.drawImage(playerleft, playerPosY*30, playerPosX*30, TANKWIDTH, TANKHEIGHT);
     else if(playerPosition == 4)
-        this.gamescreen.drawImage(playerup, playerPosX*30, playerPosY*30, TANKWIDTH, TANKHEIGHT);
+        this.gamescreen.drawImage(playerup, playerPosY*30, playerPosX*30, TANKWIDTH, TANKHEIGHT);
 }
 
 function redrawEnemy(){
     if(enemyPosition == 1)
-        gamescreen.drawImage(enemyright, enemyPosX, enemyPosY, TANKWIDTH, TANKHEIGHT);
+        gamescreen.drawImage(enemyright, enemyPosY*30, enemyPosX*30, TANKWIDTH, TANKHEIGHT);
     else if(enemyPosition == 2)
-        gamescreen.drawImage(enemydown, enemyPosX, enemyPosY, TANKWIDTH, TANKHEIGHT);
+        gamescreen.drawImage(enemydown, enemyPosY*30, enemyPosX*30, TANKWIDTH, TANKHEIGHT);
     else if(enemyPosition == 3)
-        gamescreen.drawImage(enemyleft, enemyPosX, enemyPosY, TANKWIDTH, TANKHEIGHT);
+        gamescreen.drawImage(enemyleft, enemyPosY*30, enemyPosX*30, TANKWIDTH, TANKHEIGHT);
     else if(enemyPosition == 4)
-        gamescreen.drawImage(enemyup, enemyPosX, enemyPosY, TANKWIDTH, TANKHEIGHT);
+        gamescreen.drawImage(enemyup, enemyPosY*30, enemyPosX*30, TANKWIDTH, TANKHEIGHT);
     }
 
     function enemyMovement() {
@@ -209,13 +219,15 @@ function redrawEnemy(){
             case 1:
                 gamescreen.clearRect(0, 0, canvas.width, canvas.height);
 
-                if(enemyPosX+30 < canvas.width){
-                    enemyPosX += 10;
-                    gamescreen.drawImage(enemyright, enemyPosX, enemyPosY, TANKWIDTH, TANKHEIGHT);
+                if((gameBorders[enemyPosX][enemyPosY+1]) != -1){
+                    gameBorders[enemyPosX][enemyPosY] = 0;
+                    enemyPosY++;
+                    gameBorders[enemyPosX][enemyPosY] = 2;
+                    gamescreen.drawImage(enemyright, enemyPosY*30, enemyPosX*30, TANKWIDTH, TANKHEIGHT);
                     console.log("enemy right");
                 }
                 else{
-                    gamescreen.drawImage(enemyright, enemyPosX, enemyPosY, TANKWIDTH, TANKHEIGHT);
+                    gamescreen.drawImage(enemyright, enemyPosY*30, enemyPosX*30, TANKWIDTH, TANKHEIGHT);
                     console.log("enemy rotate right");
                 }
                 break;
@@ -223,13 +235,15 @@ function redrawEnemy(){
             case 2:
                 gamescreen.clearRect(0, 0, canvas.width, canvas.height);
 
-                if(enemyPosY+30 < canvas.height){
-                    enemyPosY += 10;
-                    gamescreen.drawImage(enemydown, enemyPosX, enemyPosY, TANKWIDTH, TANKHEIGHT);
+                if((gameBorders[enemyPosX+1][enemyPosY]) !=-1){
+                    gameBorders[enemyPosX][enemyPosY] = 0;
+                    enemyPosX++;
+                    gameBorders[enemyPosX][enemyPosY] = 2;
+                    gamescreen.drawImage(enemydown, enemyPosY*30, enemyPosX*30, TANKWIDTH, TANKHEIGHT);
                     console.log("enemy down");
                 }
                 else{
-                    gamescreen.drawImage(enemydown, enemyPosX, enemyPosY, TANKWIDTH, TANKHEIGHT);
+                    gamescreen.drawImage(enemydown, enemyPosY*30, enemyPosX*30, TANKWIDTH, TANKHEIGHT);
                     console.log("enemy rotate down");
                 }                
                 break;
@@ -237,30 +251,34 @@ function redrawEnemy(){
             case 3:
                 gamescreen.clearRect(0, 0, canvas.width, canvas.height);
 
-                if(enemyPosX-10 >= 0){
-                    enemyPosX -= 10;
-                    gamescreen.drawImage(enemyleft, enemyPosX, enemyPosY, TANKWIDTH, TANKHEIGHT);
+                if((gameBorders[enemyPosX][enemyPosY-1]) != -1){
+                    gameBorders[enemyPosX][enemyPosY] = 0;
+                    enemyPosY--;
+                    gameBorders[enemyPosX][enemyPosY] = 2;
+                    gamescreen.drawImage(enemyleft, enemyPosY*30, enemyPosX*30, TANKWIDTH, TANKHEIGHT);
                     console.log("enemy left");
                 }
                 else{
-                    gamescreen.drawImage(enemyleft, enemyPosX, enemyPosY, TANKWIDTH, TANKHEIGHT);
+                    gamescreen.drawImage(enemyleft, enemyPosY*30, enemyPosX*30, TANKWIDTH, TANKHEIGHT);
                     console.log("enemy rotate left");
                 }
                 break;
             //  enemy movement or rotation up
             case 4:
                 gamescreen.clearRect(0, 0, canvas.width, canvas.height);
-                if(enemyPosY-10 >= 0){
-                    enemyPosY -= 10;
-                    gamescreen.drawImage(enemyup, enemyPosX, enemyPosY, TANKWIDTH, TANKHEIGHT);
+                
+                if((gameBorders[enemyPosX-1][enemyPosY]) != -1){
+                    gameBorders[enemyPosX][enemyPosY] = 0;
+                    enemyPosX--;
+                    gameBorders[enemyPosX][enemyPosY] = 2;
+                    gamescreen.drawImage(enemyup, enemyPosY*30, enemyPosX*30, TANKWIDTH, TANKHEIGHT);
                     console.log("enemy up");
                 }
                 else{
-                    gamescreen.drawImage(enemyup, enemyPosX, enemyPosY, TANKWIDTH, TANKHEIGHT);
+                    gamescreen.drawImage(enemyup, enemyPosY*30, enemyPosX*30, TANKWIDTH, TANKHEIGHT);
                     console.log("enemy rotate up");
                 }
-                break;
-                                
+                break;   
         }
         
         redrawPlayer();
