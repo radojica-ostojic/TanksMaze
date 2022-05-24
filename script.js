@@ -2,8 +2,10 @@ const ARROWLEFT = 37;
 const ARROWUP = 38;
 const ARROWRIGHT = 39;
 const ARROWDOWN = 40;
+const PLAYERSHOOT = 32;
 const TANKWIDTH = 30;
 const TANKHEIGHT = 30;
+const SPEED = 200;
 
 
 
@@ -25,7 +27,9 @@ var playerPosY = 1;
 var playerPosition = 1;
 var enemyPosition = 1;
 var enemyPosX = 18;
-var enemyPosY = 6;
+var enemyPosY = 7;
+var bulletPosX;
+var bulletPosY;
 var canvas;
 var gamescreen;
 var playerright = new Image();
@@ -55,15 +59,21 @@ var gameBorders = [[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 
                     [-1, 0, -1, 0, -1, 0, -1, 0, -1, 0, 0, -1, -1, -1, 0, 0, -1, 0, 0, -1, 0, -1],
                     [-1, 0, 0, 0, -1, 0, 0, 0, 0, 0, -1, -1, 0, -1, -1, 0, -1, 0, -1, -1, 0, -1],
                     [-1, 0, -1, 0, -1, -1, -1, -1, -1, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, -1], 
-                    [-1, 0, -1, 0, -1, 0, 2, 0, -1, -1, -1, 0, -1, -1, -1, 0, 0, 0, 0, 0, 0, -1],
+                    [-1, 0, -1, 0, -1, 0, 0, 2, -1, -1, -1, 0, -1, -1, -1, 0, 0, 0, 0, 0, 0, -1],
                     [-1, 0, 0, 0, -1, 0, -1, -1, -1, 0, 0, 0, 0, -1, 0, 0, -1, -1, -1, 0, 0, -1],
                     [-1, 0, -1, -1, -1, 0, 0, 0, 0, 0, -1, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1], 
                     [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]];
+var playerShootFlag = 0;
+var playerShootTimer;
+
 
 function moveit(e){
     var now = new Date().getTime();
-
-    if((now - prevTime) < 200)
+    if(e.keyCode == PLAYERSHOOT){
+        if(playerShootFlag){ return;}
+        bullet();
+    }
+    if((now - prevTime) < SPEED)
         return; 
     
     prevTime = now;
@@ -142,8 +152,12 @@ function moveit(e){
         } 
         playerPosition = 1;
     }
+    
     redrawEnemy();
     obstacleDrawing();
+    if(playerShootFlag){
+        bullet();
+    }
 }
 
 
@@ -181,11 +195,11 @@ function init() {
   
   canvas.style.display = "block";
   gamescreen.drawImage(playerright, playerPosX*30, playerPosY*30, TANKWIDTH, TANKHEIGHT);
-  gamescreen.drawImage(enemyleft, enemyPosY*30, enemyPosX*30, TANKWIDTH, TANKHEIGHT);
+  gamescreen.drawImage(enemyright, enemyPosY*30, enemyPosX*30, TANKWIDTH, TANKHEIGHT);
   obstacleDrawing();
 
 //   function for moving enemy tank    
-  setInterval(enemyMovement, 300);
+//   setInterval(enemyMovement, SPEED);
 }
   
 
@@ -280,7 +294,9 @@ function redrawEnemy(){
                 }
                 break;   
         }
-        
+        if(playerShootFlag){
+            bullet();
+        }
         redrawPlayer();
         obstacleDrawing();
                                               
@@ -297,5 +313,146 @@ function obstacleDrawing(){
             }
                 
         }
+    }
+}
+function bullet(){
+    if(playerShootFlag == 0){
+        switch (playerPosition) {
+            case 1:
+                bulletPosY = playerPosY + 1;
+                bulletPosX = playerPosX;
+                playerShootTimer = setInterval(() => {
+                    if(gameBorders[bulletPosX][bulletPosY] == 2){
+                        console.log("enemy no1 hit");
+                        clearInterval(playerShootTimer); 
+                        gamescreen.clearRect(0, 0, canvas.width, canvas.height);
+                    }
+                    else if(gameBorders[bulletPosX][bulletPosY] != -1){
+                        playerShootFlag++;
+                        gameBorders[bulletPosX][bulletPosY-1] = 0;
+                        gameBorders[bulletPosX][bulletPosY] = 5;
+                        gamescreen.clearRect(0, 0, canvas.width, canvas.height);
+                        gamescreen.fillStyle = "#ffffff";
+                        gamescreen.beginPath();
+                        gamescreen.arc(bulletPosY*30+15, bulletPosX*30+15, 5, 0, 2 * Math.PI);
+                        gamescreen.fill();
+                        console.log("shoot right");
+                    }
+                     
+                    else{
+                        console.log("bullet hit wall on the right");
+                        clearInterval(playerShootTimer); 
+                        playerShootFlag = 0;
+                        gamescreen.clearRect(0, 0, canvas.width, canvas.height);
+                    }
+                    bulletPosY++;
+                    redrawEnemy();
+                    obstacleDrawing();
+                    redrawPlayer();
+                }, SPEED);
+                break;
+            case 2:
+                bulletPosY = playerPosY;
+                bulletPosX = playerPosX + 1;
+                playerShootTimer = setInterval(() => {
+                    if(gameBorders[bulletPosX][bulletPosY] == 2){
+                        console.log("enemy no1 hit");
+                        clearInterval(playerShootTimer); 
+                        gamescreen.clearRect(0, 0, canvas.width, canvas.height);
+                    }
+                    else if(gameBorders[bulletPosX][bulletPosY] != -1){
+                        playerShootFlag++;
+                        gameBorders[bulletPosX-1][bulletPosY] = 0;
+                        gameBorders[bulletPosX][bulletPosY] = 5;
+                        gamescreen.clearRect(0, 0, canvas.width, canvas.height);
+                        gamescreen.fillStyle = "#ffffff";
+                        gamescreen.beginPath();
+                        gamescreen.arc(bulletPosY*30+15, bulletPosX*30+15, 5, 0, 2 * Math.PI);
+                        gamescreen.fill();
+                        console.log("shoot down");
+                    }
+                     
+                    else{
+                        console.log("bullet hit wall on the bottom");
+                        clearInterval(playerShootTimer); 
+                        playerShootFlag = 0;
+                        gamescreen.clearRect(0, 0, canvas.width, canvas.height);
+                    }
+                    bulletPosX++;
+                    redrawEnemy();
+                    obstacleDrawing();
+                    redrawPlayer();
+                }, SPEED);
+                break;
+            case 3:
+                bulletPosY = playerPosY - 1;
+                bulletPosX = playerPosX;
+                playerShootTimer = setInterval(() => {
+                    if(gameBorders[bulletPosX][bulletPosY] == 2){
+                        console.log("enemy no1 hit");
+                        clearInterval(playerShootTimer); 
+                        gamescreen.clearRect(0, 0, canvas.width, canvas.height);
+                    }
+                    else if(gameBorders[bulletPosX][bulletPosY] != -1){
+                        playerShootFlag++;
+                        gameBorders[bulletPosX][bulletPosY+1] = 0;
+                        gameBorders[bulletPosX][bulletPosY] = 5;
+                        gamescreen.clearRect(0, 0, canvas.width, canvas.height);
+                        gamescreen.fillStyle = "#ffffff";
+                        gamescreen.beginPath();
+                        gamescreen.arc(bulletPosY*30+15, bulletPosX*30+15, 5, 0, 2 * Math.PI);
+                        gamescreen.fill();
+                        console.log("shoot left");
+                    }
+                     
+                    else{
+                        console.log("bullet hit wall on the left");
+                        clearInterval(playerShootTimer); 
+                        playerShootFlag = 0;
+                        gamescreen.clearRect(0, 0, canvas.width, canvas.height);
+                    }
+                    bulletPosY--;
+                    redrawEnemy();
+                    obstacleDrawing();
+                    redrawPlayer();
+                }, SPEED);
+                break;
+            case 4:
+                bulletPosY = playerPosY;
+                bulletPosX = playerPosX - 1;
+                playerShootTimer = setInterval(() => {
+                    if(gameBorders[bulletPosX][bulletPosY] == 2){
+                        console.log("enemy no1 hit");
+                        clearInterval(playerShootTimer); 
+                        gamescreen.clearRect(0, 0, canvas.width, canvas.height);
+                    }
+                    else if(gameBorders[bulletPosX][bulletPosY] != -1){
+                        playerShootFlag++;
+                        gameBorders[bulletPosX+1][bulletPosY] = 0;
+                        gameBorders[bulletPosX][bulletPosY] = 5;
+                        gamescreen.clearRect(0, 0, canvas.width, canvas.height);
+                        gamescreen.fillStyle = "#ffffff";
+                        gamescreen.beginPath();
+                        gamescreen.arc(bulletPosY*30+15, bulletPosX*30+15, 5, 0, 2 * Math.PI);
+                        gamescreen.fill();
+                        console.log("shoot down");
+                    }
+                     
+                    else{
+                        console.log("bullet hit wall on the bottom");
+                        clearInterval(playerShootTimer); 
+                        playerShootFlag = 0;
+                        gamescreen.clearRect(0, 0, canvas.width, canvas.height);
+                    }
+                    bulletPosX--;
+                    redrawEnemy();
+                    obstacleDrawing();
+                    redrawPlayer();
+                }, SPEED);
+                break;
+            default:
+                break;
+        } 
+        
     }
 }
