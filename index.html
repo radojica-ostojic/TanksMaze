@@ -35,8 +35,16 @@
         <!-- loading="eager" is used so that picture of enemy tank appear after click on start game button and not after function delay for moving -->
         <img src="pictures/enemyright.png" style="display: none;" id="pitcurestyle" width="30" height="30"  alt="" loading="eager">
     </div>
-    
-    
+    <div id="won" style="display: none;">
+        <p id="winOrLose">PLAYER WON!</p> 
+        <button id="btn" onclick="init();  document.getElementById('won').style.display= 'none'">Retry</button><br>
+        <button id="btn" onclick="window.location.reload(true);">Main menu</button>
+    </div>
+    <div id="lost" style="display: none;">
+        <p id="winOrLose">PLAYER &nbsp&nbspLOST!</p> 
+        <button id="btn" onclick="init();  document.getElementById('lost').style.display= 'none'">Retry</button><br>
+        <button id="btn" onclick="window.location.reload(true);">Main menu</button>
+    </div>
     
 </body>
 
