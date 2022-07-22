@@ -45,6 +45,7 @@ var shootTimer = [];
 var grid;
 var currDistance;
 var nextDistance;
+var music = document.getElementById('track');
 
 const tank = {
     tankId : 0,
@@ -56,6 +57,20 @@ const tank = {
     shootFlag : false
 }
 var tanks = [];
+
+
+function soundtrack(){
+    music.pause();
+    music.currentTime = 0;
+    music = document.getElementById('track');
+    music.loop = true;
+    music.play();
+}
+
+
+
+
+
 
 function moveit(e){
     var now = new Date().getTime();
@@ -107,10 +122,6 @@ function moveit(e){
 }
 
 
-
-
-
-
 // canvas creation
 
 function init() {
@@ -128,7 +139,7 @@ function init() {
   playerdown.src = 'pictures/playerdown.png';
   playerleft.src = 'pictures/playerleft.png';
   playerup.src = 'pictures/palyerup.png';
-  
+
   enemyright.src = 'pictures/enemyright.png';
   enemydown.src = 'pictures/enemydown.png';
   enemyleft.src = 'pictures/enemyleft.png';
@@ -466,22 +477,18 @@ function gameFinished(){
         clearInterval(tempoTimeVariable);
         canvas.style.display = 'none';
         document.getElementById('lost').style.display = 'block';
-        // if (confirm("Player lost.\n\n RELOAD???")) {
-        //     init();
-        //   } else {
-        //     window.location.reload(true);
-        //   }
+        music.pause();
+        music = document.getElementById('gameLost');
+        music.play();
     }
     else if(!tanks[1].aliveFlag && !tanks[2].aliveFlag && !tanks[3].aliveFlag ){
         window.document.removeEventListener("keydown", moveit, true);
         clearInterval(tempoTimeVariable);
         canvas.style.display = 'none';
         document.getElementById('won').style.display = 'block';
-        // if (confirm("Player won.\n\n RELOAD???")) {
-        //     init();
-        //   } else {
-        //     window.location.reload(true);
-        //   }
+        music.pause();
+        music = document.getElementById('gameWon');
+        music.play();
     }
 }
 function gameRefresh(){

@@ -20,11 +20,14 @@
         Click the image when the keyboard can not be operated
         
         </div>
-        <audio id="audio">
-            <source src="https://hankuro.sakura.ne.jp/audio/cannon1.mp3" type="audio/mp3">
+        <audio id="track" preload="auto" onload="soundtrack()">
+            <source src="sounds/tank8bit.mp3" type="audio/mp3">
         </audio>
-        <audio id="audioBomb">
-            <source src="https://hankuro.sakura.ne.jp/audio/bomb2.mp3" type="audio/mp3">
+        <audio id="gameWon" preload="auto">
+            <source src="sounds/tankWon.mp3" type="audio/mp3">
+        </audio>
+        <audio id="gameLost" preload="auto">
+            <source src="sounds/tankLost.mp3" type="audio/mp3">
         </audio>
         <script src="script.js"></script>
     </div>
@@ -37,13 +40,13 @@
     </div>
     <div id="won" style="display: none;">
         <p id="winOrLose">PLAYER WON!</p> 
-        <button id="btn" onclick="popTanks(); init();  document.getElementById('won').style.display= 'none'">Retry</button><br>
-        <button id="btn" onclick="window.location.reload(true);">Main menu</button>
+        <button id="btn" onclick="popTanks(); init();  document.getElementById('won').style.display= 'none';  soundtrack();">Retry</button><br>
+        <button id="btn" onclick="window.location.reload(true);  soundtrack();">Main menu</button>
     </div>
     <div id="lost" style="display: none;">
         <p id="winOrLose">PLAYER &nbsp&nbspLOST!</p> 
-        <button id="btn" onclick=" popTanks(); init();  document.getElementById('lost').style.display= 'none'">Retry</button><br>
-        <button id="btn" onclick="window.location.reload(true);">Main menu</button>
+        <button id="btn" onclick=" popTanks(); init();  document.getElementById('lost').style.display= 'none';  soundtrack();">Retry</button><br>
+        <button id="btn" onclick="window.location.reload(true); soundtrack();">Main menu</button>
     </div>
     
 </body>
