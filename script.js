@@ -99,6 +99,11 @@ function moveit(e){
     if(tanks[0].shootFlag){
         bullet(0);
     }
+    for(let id = 0; id < 4; id++){
+        if(tanks[id].shootFlag){
+            bulletRedraw(id);
+        }
+    }
 }
 
 
@@ -128,13 +133,6 @@ function init() {
   enemydown.src = 'pictures/enemydown.png';
   enemyleft.src = 'pictures/enemyleft.png';
   enemyup.src = 'pictures/enemyup.png';
-  setTimeout(() => {
-    //   tanks[0].aliveFlag = false;
-        // tanks[1].aliveFlag = false;
-        // tanks[2].aliveFlag = false;
-        // tanks[3].aliveFlag = false;
-    //   gameRefresh();
-  }, 1500);
 
   gamescreen.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -220,11 +218,11 @@ function redrawEnemy(){
                 // try to fix refresh...timer and shooting works
 
                 // commented part below doesn't work
-                // for(let id = 1; id < 4; id++){
-                //     if(tanks[id].shootFlag && tanks[id].tankId != index){
-                //         bullet(index);
-                //     }
-                // }
+                for(let id = 0; id < 4; id++){
+                    if(tanks[id].shootFlag){
+                        bulletRedraw(id);
+                    }
+                }
 
                 console.log("drawn tank NO.  ", index, tanks[index].position);
                 redrawPlayer();
@@ -260,16 +258,17 @@ function bullet(id){
                         tanks[id].shootFlag = 0;
                         clearInterval(shootTimer[id]);
                         if(gameContext[bulletPosX[id]][bulletPosY[id]-1] == 5){
-                            gameContext[bulletPosX[id]][bulletPosY[id]-1] = 0;}
+                            gameContext[bulletPosX[id]][bulletPosY[id]-1] = 0;
+                        }
                         gameContext[bulletPosX[id]][bulletPosY[id]] = 0;
                         gameRefresh();
                     }
                     else if(gameContext[bulletPosX[id]][bulletPosY[id]] != -1){
                         tanks[id].shootFlag++;
                         if(gameContext[bulletPosX[id]][bulletPosY[id]-1] == 5){
-                        gameContext[bulletPosX[id]][bulletPosY[id]-1] = 0;}
+                        gameContext[bulletPosX[id]][bulletPosY[id]-1] = 0;
+                    }
                         gameContext[bulletPosX[id]][bulletPosY[id]] = 5;
-                        // gamescreen.clearRect(0, 0, canvas.width, canvas.height);
                         bulletDrawing(bulletPosX[id], bulletPosY[id]);
                         gamescreen.fill();
                         console.log("shoot right");
@@ -280,7 +279,6 @@ function bullet(id){
                         gameContext[bulletPosX[id]][bulletPosY[id]-1] = 0;
                         clearInterval(shootTimer[id]); 
                         tanks[id].shootFlag = 0;
-                        // gamescreen.clearRect(0, 0, canvas.width, canvas.height);
                     }
                     bulletPosY[id]++;
                     redrawEnemy();
@@ -308,7 +306,6 @@ function bullet(id){
                             gameContext[bulletPosX[id]-1][bulletPosY[id]] = 0;
                         }
                         gameContext[bulletPosX[id]][bulletPosY[id]] = 5;
-                        // gamescreen.clearRect(0, 0, canvas.width, canvas.height);
                         bulletDrawing(bulletPosX[id], bulletPosY[id]);
                         gamescreen.fill();
                         console.log("shoot down");
@@ -318,7 +315,6 @@ function bullet(id){
                         gameContext[bulletPosX[id]-1][bulletPosY[id]] = 0;
                         clearInterval(shootTimer[id]); 
                         tanks[id].shootFlag = 0;
-                        // gamescreen.clearRect(0, 0, canvas.width, canvas.height);
                     }
                     bulletPosX[id]++;
                     redrawEnemy();
@@ -335,16 +331,17 @@ function bullet(id){
                         tanks[id].shootFlag = 0;
                         clearInterval(shootTimer[id]); 
                         if(gameContext[bulletPosX[id]][bulletPosY[id]+1] == 5){
-                            gameContext[bulletPosX[id]][bulletPosY[id]+1] = 0;}
+                            gameContext[bulletPosX[id]][bulletPosY[id]+1] = 0;
+                        }
                         gameContext[bulletPosX[id]][bulletPosY[id]] = 0;
                         gameRefresh();
                     }
                     else if(gameContext[bulletPosX[id]][bulletPosY[id]] != -1){
                         tanks[id].shootFlag++;
                         if(gameContext[bulletPosX[id]][bulletPosY[id]+1] == 5){
-                            gameContext[bulletPosX[id]][bulletPosY[id]+1] = 0;}
+                            gameContext[bulletPosX[id]][bulletPosY[id]+1] = 0;
+                        }
                         gameContext[bulletPosX[id]][bulletPosY[id]] = 5;
-                        // gamescreen.clearRect(0, 0, canvas.width, canvas.height);
                         bulletDrawing(bulletPosX[id], bulletPosY[id]);
                         gamescreen.fill();
                         console.log("shoot left");
@@ -354,7 +351,6 @@ function bullet(id){
                         gameContext[bulletPosX[id]][bulletPosY[id]+1] = 0;
                         clearInterval(shootTimer[id]); 
                         tanks[id].shootFlag = 0;
-                        // gamescreen.clearRect(0, 0, canvas.width, canvas.height);
                     }
                     bulletPosY[id]--;
                     redrawEnemy();
@@ -371,16 +367,17 @@ function bullet(id){
                         tanks[id].shootFlag = 0;
                         clearInterval(shootTimer[id]); 
                         if(gameContext[bulletPosX[id]+1][bulletPosY[id]] == 5){
-                            gameContext[bulletPosX[id]+1][bulletPosY[id]] = 0;}
+                            gameContext[bulletPosX[id]+1][bulletPosY[id]] = 0;
+                        }
                         gameContext[bulletPosX[id]][bulletPosY[id]] = 0;
                         gameRefresh();
                     }
                     else if(gameContext[bulletPosX[id]][bulletPosY[id]] != -1){
                         tanks[id].shootFlag++;
                         if(gameContext[bulletPosX[id]+1][bulletPosY[id]] == 5){
-                            gameContext[bulletPosX[id]+1][bulletPosY[id]] = 0;}
+                            gameContext[bulletPosX[id]+1][bulletPosY[id]] = 0;
+                        }
                         gameContext[bulletPosX[id]][bulletPosY[id]] = 5;
-                        // gamescreen.clearRect(0, 0, canvas.width, canvas.height);
                         bulletDrawing(bulletPosX[id], bulletPosY[id]);
                         console.log("shoot up");
                     }
@@ -390,7 +387,6 @@ function bullet(id){
                         clearInterval(shootTimer[id]);
                         gameContext[bulletPosX[id]+1][bulletPosY[id]] = 0;
                         tanks[id].shootFlag = 0;
-                        // gamescreen.clearRect(0, 0, canvas.width, canvas.height);
                     }
                     bulletPosX[id]--;
                     redrawEnemy();
@@ -402,14 +398,11 @@ function bullet(id){
                 break;
         } 
     }
-    // redrawing bullet if it's not going to be on wall
-    else {
-        if(gameContext[bulletPosX[id]][bulletPosY[id]] != -1){
-            bulletDrawing(bulletPosX[id], bulletPosY[id]);
-        }
-    }
 }
-
+function bulletRedraw(id){
+    // redrawing bullet if it's not going to be on wall or hit anyone
+        bulletDrawing(bulletPosX[id], bulletPosY[id]);
+}
 function bulletDrawing(bulletPosX, bulletPosY){
     gamescreen.fillStyle = "#ffffff";
     gamescreen.beginPath();
@@ -628,7 +621,7 @@ function minDistance(grid)
     for (var i = 0; i < N; i++) {
         for (var j = 0; j < M; j++)
         {
-            if (grid[i][j] == '-1')
+            if (grid[i][j] == '-1' || grid[i][j] == '2' || grid[i][j] == '3' || grid[i][j] == '4')
                 visited[i][j] = true;
             else
                 visited[i][j] = false;
