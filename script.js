@@ -189,6 +189,7 @@ function redrawEnemy(){
     }
 }
     function enemyMovement() {
+        document.getElementById('canvas').autofocus;
         for (let index = 1; index < 4; index++) {    
             if(tanks[index].aliveFlag){
                 grid = gameContext;
