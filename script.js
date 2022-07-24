@@ -46,6 +46,7 @@ var grid;
 var currDistance;
 var nextDistance;
 var music = document.getElementById('track');
+var counter;
 
 const tank = {
     tankId : 0,
@@ -60,13 +61,13 @@ var tanks = [];
 
 
 function soundtrack(){
-    // music.pause();
-    // music.currentTime = 0;
-    // music = document.getElementById('track');
-    // music.loop = true;
-    // music.autoplay = true;
-    // music.load();
-    // music.play();
+    music.pause();
+    music.currentTime = 0;
+    music = document.getElementById('track');
+    music.loop = true;
+    music.autoplay = true;
+    music.load();
+    music.play();
 }
 
 function moveit(e){
@@ -768,53 +769,61 @@ function calculatingMove(numberOfTank){
     return returnValue;
 }
 function shooting(currTank){
-    var counter = 0;
+    counter = 0;
     // this checks if player tank is below or above enemy tank and if enemy tank is rotated down or up so it can shoot
     if(tanks[0].tankPositionY == tanks[currTank].tankPositionY){
         if(tanks[0].tankPositionX > tanks[currTank].tankPositionX && tanks[currTank].position == DOWN){
-            for (let index = tanks[currTank].tankPositionX+1; index <= tanks[0].tankPositionX; index++) {
+            for (let index = tanks[currTank].tankPositionX+1; index < tanks[0].tankPositionX; index++) {
                 if(gameContext[index][tanks[currTank].tankPositionY] != 0){
                     return 0;
                 }
+                counter++;
+            }
+            if((gameContext[tanks[currTank].tankPositionX+1][tanks[currTank].tankPositionY]) == 1){
                 counter++;
             }
         }
         if(tanks[0].tankPositionX < tanks[currTank].tankPositionX && tanks[currTank].position == UP){
-            for (let index = tanks[0].tankPositionX; index <= tanks[currTank].tankPositionX; index++) {
+            for (let index = tanks[0].tankPositionX+1; index < tanks[currTank].tankPositionX; index++) {
                 if(gameContext[index][tanks[currTank].tankPositionY] != 0){
                     return 0;
                 }
                 counter++;
             }
-        }
-        if(!counter){
-            if((gameContext[tanks[currTank].tankPositionX+1][tanks[currTank].tankPositionY]) == 1 || (gameContext[tanks[currTank].tankPositionX-1][tanks[currTank].tankPositionY]) == 1){
+            if((gameContext[tanks[currTank].tankPositionX-1][tanks[currTank].tankPositionY]) == 1){
                 counter++;
             }
+        }
     }
     // this checks if player tank is left or right of enemy tank and if enemy tank is rotated left or right so it can shoot
     if(tanks[0].tankPositionX == tanks[currTank].tankPositionX){
         if(tanks[0].tankPositionY > tanks[currTank].tankPositionY && tanks[currTank].position == RIGHT){
-            for (let index = tanks[currTank].tankPositionY+1; index <= tanks[0].tankPositionY; index++) {
+            for (let index = tanks[currTank].tankPositionY+1; index < tanks[0].tankPositionY; index++) {
                 if(gameContext[tanks[currTank].tankPositionX][index] != 0){
                     return 0;
                 }
                 counter++;
             }
+            if((gameContext[tanks[currTank].tankPositionX][tanks[currTank].tankPositionY+1]) == 1){
+                counter++;
+            }
         }
         if(tanks[0].tankPositionY < tanks[currTank].tankPositionY && tanks[currTank].position == LEFT){
-            for (let index = tanks[0].tankPositionY; index <= tanks[currTank].tankPositionY; index++) {
+            for (let index = tanks[0].tankPositionY+1; index < tanks[currTank].tankPositionY; index++) {
                 if(gameContext[tanks[currTank].tankPositionX][index] != 0){
                     return 0;
                 }
+                counter++;
+            }
+            if((gameContext[tanks[currTank].tankPositionX][tanks[currTank].tankPositionY-1]) == 1){
                 counter++;
             }
         }  
     }
     if(counter)
         return 1;
-    }
 }
+
 
 function lastStepRotation(tankIndex){
     // this checks if player tank is below or above enemy tank and if enemy tank is rotated down or up so it can rotate
