@@ -60,17 +60,14 @@ var tanks = [];
 
 
 function soundtrack(){
-    music.pause();
-    music.currentTime = 0;
-    music = document.getElementById('track');
-    music.loop = true;
-    music.play();
+    // music.pause();
+    // music.currentTime = 0;
+    // music = document.getElementById('track');
+    // music.loop = true;
+    // music.autoplay = true;
+    // music.load();
+    // music.play();
 }
-
-
-
-
-
 
 function moveit(e){
     var now = new Date().getTime();
@@ -121,12 +118,11 @@ function moveit(e){
     }
 }
 
-
 // canvas creation
-
 function init() {
   hiding();
   dataInit();
+  soundtrack();
   canvas = document.getElementById("canvas");
   gamescreen = canvas.getContext("2d");
   window.document.addEventListener('keydown', moveit, true);
@@ -159,11 +155,12 @@ function init() {
   
 
 //   function for moving enemy tank    
-tempoTimeVariable = setInterval(enemyMovement, SPEED*2);
+tempoTimeVariable = setInterval(enemyMovement, SPEED*1.5);
 }
   
 
 function redrawPlayer(){
+    gameContext[tanks[0].tankPositionX][tanks[0].tankPositionY] = 1;
     if(tanks[0].position == RIGHT)
         this.gamescreen.drawImage(playerright, tanks[0].tankPositionY*30, tanks[0].tankPositionX*30, TANKWIDTH, TANKHEIGHT);
     else if(tanks[0].position == DOWN)
@@ -204,38 +201,41 @@ function redrawEnemy(){
                     enemyPosition = calculatingMove(index);
                     // enemy movement using switch with if
                     switch (enemyPosition) {
-                        // enemy movement right
+                    // enemy movement right
                         case RIGHT:
                             gamescreen.clearRect(0, 0, canvas.width, canvas.height);
                             tankMovement(index, RIGHT, enemyright);            
                             break;
-                        // enemy movement down
+                    // enemy movement down
                         case DOWN:
                             gamescreen.clearRect(0, 0, canvas.width, canvas.height);
                             tankMovement(index, DOWN, enemydown);            
                             break;
-                        // enemy movement left
+                    // enemy movement left
                         case LEFT:
                             gamescreen.clearRect(0, 0, canvas.width, canvas.height);
                             tankMovement(index, LEFT, enemyleft);
                             break;
-                        //  enemy movement up
+                    //  enemy movement up
                         case UP:
                             gamescreen.clearRect(0, 0, canvas.width, canvas.height);
                             tankMovement(index, UP, enemyup);
-                            break;   
+                            break; 
+                        default:
+                            gamescreen.clearRect(0, 0, canvas.width, canvas.height);
+                            let pos = lastStepRotation(index);
+                            tanks[index].position = pos;
+                            console.log("odradio funkciju");
+                            break;  
                     }
                 }
-                // try to fix refresh...timer and shooting works
-
-                // commented part below doesn't work
+                
                 for(let id = 0; id < 4; id++){
                     if(tanks[id].shootFlag){
                         bulletRedraw(id);
                     }
                 }
 
-                console.log("drawn tank NO.  ", index, tanks[index].position);
                 redrawPlayer();
                 redrawEnemy();
                 obstacleDrawing();
@@ -523,19 +523,19 @@ function tankMovement(tankIndex, rotation, pitcure){
             tanks[tankIndex].position = DOWN;
             if(tanks[tankIndex].position != tanks[tankIndex].prevPosition){
                 gamescreen.drawImage(pitcure, tanks[tankIndex].tankPositionY*30, tanks[tankIndex].tankPositionX*30, TANKWIDTH, TANKHEIGHT);        
-                console.log("tank rotate down",tankIndex);
+                // console.log("tank rotate down",tankIndex);
                 tanks[tankIndex].prevPosition = tanks[tankIndex].position;
             }
             else if((gameContext[tanks[tankIndex].tankPositionX+1][tanks[tankIndex].tankPositionY]) == 0){
-                    gameContext[tanks[tankIndex].tankPositionX][tanks[tankIndex].tankPositionY] = 0;
-                    tanks[tankIndex].tankPositionX++;
-                    gameContext[tanks[tankIndex].tankPositionX][tanks[tankIndex].tankPositionY] = tankIndex+1;
-                    gamescreen.drawImage(pitcure, tanks[tankIndex].tankPositionY*30, tanks[tankIndex].tankPositionX*30, TANKWIDTH, TANKHEIGHT);        
-                    console.log("tank down",tankIndex);
+                gameContext[tanks[tankIndex].tankPositionX][tanks[tankIndex].tankPositionY] = 0;
+                tanks[tankIndex].tankPositionX++;
+                gameContext[tanks[tankIndex].tankPositionX][tanks[tankIndex].tankPositionY] = tankIndex+1;
+                gamescreen.drawImage(pitcure, tanks[tankIndex].tankPositionY*30, tanks[tankIndex].tankPositionX*30, TANKWIDTH, TANKHEIGHT);        
+                // console.log("tank down",tankIndex);
             }
             else{
                 gamescreen.drawImage(pitcure, tanks[tankIndex].tankPositionY*30, tanks[tankIndex].tankPositionX*30, TANKWIDTH, TANKHEIGHT);        
-                console.log("tank rotate down",tankIndex);
+                // console.log("tank rotate down",tankIndex);
             }
             break;
         case LEFT:
@@ -561,7 +561,7 @@ function tankMovement(tankIndex, rotation, pitcure){
             tanks[tankIndex].position = RIGHT;
             if(tanks[tankIndex].position != tanks[tankIndex].prevPosition){
                 gamescreen.drawImage(pitcure, tanks[tankIndex].tankPositionY*30, tanks[tankIndex].tankPositionX*30, TANKWIDTH, TANKHEIGHT);        
-                console.log("tank rotate right",tankIndex);
+                // console.log("tank rotate right",tankIndex);
                 tanks[tankIndex].prevPosition = tanks[tankIndex].position;
             }    
             else if((gameContext[tanks[tankIndex].tankPositionX][tanks[tankIndex].tankPositionY+1]) == 0){
@@ -569,18 +569,18 @@ function tankMovement(tankIndex, rotation, pitcure){
                 tanks[tankIndex].tankPositionY++;
                 gameContext[tanks[tankIndex].tankPositionX][tanks[tankIndex].tankPositionY] = tankIndex+1;
                 gamescreen.drawImage(pitcure, tanks[tankIndex].tankPositionY*30, tanks[tankIndex].tankPositionX*30, TANKWIDTH, TANKHEIGHT);        
-                console.log("tank right",tankIndex);
+                // console.log("tank right",tankIndex);
             }
             else{
                 gamescreen.drawImage(pitcure, tanks[tankIndex].tankPositionY*30, tanks[tankIndex].tankPositionX*30, TANKWIDTH, TANKHEIGHT);        
-                console.log("tank rotate right",tankIndex);
+                // console.log("tank rotate right",tankIndex);
             } 
         break;
         case UP:
             tanks[tankIndex].position = UP;
             if(tanks[tankIndex].position != tanks[tankIndex].prevPosition){
                 gamescreen.drawImage(pitcure, tanks[tankIndex].tankPositionY*30, tanks[tankIndex].tankPositionX*30, TANKWIDTH, TANKHEIGHT);        
-                console.log("tank rotate up",tankIndex);
+                // console.log("tank rotate up",tankIndex);
                 tanks[tankIndex].prevPosition = tanks[tankIndex].position;
             }
             else if((gameContext[tanks[tankIndex].tankPositionX-1][tanks[tankIndex].tankPositionY]) == 0){
@@ -588,11 +588,11 @@ function tankMovement(tankIndex, rotation, pitcure){
                 tanks[tankIndex].tankPositionX--;
                 gameContext[tanks[tankIndex].tankPositionX][tanks[tankIndex].tankPositionY] = tankIndex+1;
                 gamescreen.drawImage(pitcure, tanks[tankIndex].tankPositionY*30, tanks[tankIndex].tankPositionX*30, TANKWIDTH, TANKHEIGHT);        
-                console.log("tank up",tankIndex);
+                // console.log("tank up",tankIndex);
             }
             else{
                 gamescreen.drawImage(pitcure, tanks[tankIndex].tankPositionY*30, tanks[tankIndex].tankPositionX*30, TANKWIDTH, TANKHEIGHT);        
-                console.log("tank rotate up",tankIndex);
+                // console.log("tank rotate up",tankIndex);
             } 
         break;
         default:
@@ -601,7 +601,7 @@ function tankMovement(tankIndex, rotation, pitcure){
      
 }
 
-function movementCalculation(grid, nunberOfTnk){
+function movementCalculation(grid, numberOfTnk){
 // Javascript Code implementation for above problem
 var N = 22;
 var M = 22;
@@ -634,7 +634,7 @@ function minDistance(grid)
                 visited[i][j] = false;
  
             // Finding source
-            if (grid[i][j] == nunberOfTnk+1)
+            if (grid[i][j] == numberOfTnk+1)
             {
                source.row = i;
                source.col = j;
@@ -651,9 +651,9 @@ function minDistance(grid)
         q.shift();
  
         // Destination found;
-        if (grid[p.row][p.col] == '1')
+        if (grid[p.row][p.col] == '1'){
             return p.dist;
- 
+        }
         // moving up
         if (p.row - 1 >= 0 &&
             visited[p.row - 1][p.col] == false) {
@@ -688,8 +688,7 @@ function minDistance(grid)
  
 // Driver code
 // grid = gameContext;
-console.log(minDistance(grid));
-console.log("broj tenka", nunberOfTnk);
+console.log("udaljenost tenka ", numberOfTnk," je ", minDistance(grid));
 return minDistance(grid);
 // This code is contributed by rrrtnx.
 }
@@ -697,12 +696,12 @@ function calculatingMove(numberOfTank){
     var distance = 1000;
     var returnValue = 0;
     var tanksCopy = tanks;
-    grid = gameContext;
     for (let index = 1; index < 5; index++) {
+        grid = gameContext;
         switch (index) {
             case RIGHT:
                 tanksCopy[numberOfTank].tankPositionY++;
-                if(grid[tanksCopy[numberOfTank].tankPositionX][tanksCopy[numberOfTank].tankPositionY] == 0){
+                if(grid[tanksCopy[numberOfTank].tankPositionX][tanksCopy[numberOfTank].tankPositionY] == 0 || grid[tanksCopy[numberOfTank].tankPositionX][tanksCopy[numberOfTank].tankPositionY] == 1){
                     grid[tanksCopy[numberOfTank].tankPositionX][tanksCopy[numberOfTank].tankPositionY-1] = 0;
                     grid[tanksCopy[numberOfTank].tankPositionX][tanksCopy[numberOfTank].tankPositionY] = numberOfTank + 1;
                     if(movementCalculation(grid, numberOfTank) < distance){
@@ -717,7 +716,7 @@ function calculatingMove(numberOfTank){
             // enemy movement down
             case DOWN:
                 tanksCopy[numberOfTank].tankPositionX++;
-                if(grid[tanksCopy[numberOfTank].tankPositionX][tanksCopy[numberOfTank].tankPositionY] == 0){
+                if(grid[tanksCopy[numberOfTank].tankPositionX][tanksCopy[numberOfTank].tankPositionY] == 0  || grid[tanksCopy[numberOfTank].tankPositionX][tanksCopy[numberOfTank].tankPositionY] == 1){
                     grid[tanksCopy[numberOfTank].tankPositionX-1][tanksCopy[numberOfTank].tankPositionY] = 0;
                     grid[tanksCopy[numberOfTank].tankPositionX][tanksCopy[numberOfTank].tankPositionY] = numberOfTank + 1;
                     if(movementCalculation(grid, numberOfTank) < distance){
@@ -732,7 +731,7 @@ function calculatingMove(numberOfTank){
             // enemy movement left
             case LEFT:
                 tanksCopy[numberOfTank].tankPositionY--;
-                if(grid[tanksCopy[numberOfTank].tankPositionX][tanksCopy[numberOfTank].tankPositionY] == 0){
+                if(grid[tanksCopy[numberOfTank].tankPositionX][tanksCopy[numberOfTank].tankPositionY] == 0 || grid[tanksCopy[numberOfTank].tankPositionX][tanksCopy[numberOfTank].tankPositionY] == 1){
                     grid[tanksCopy[numberOfTank].tankPositionX][tanksCopy[numberOfTank].tankPositionY+1] = 0;
                     grid[tanksCopy[numberOfTank].tankPositionX][tanksCopy[numberOfTank].tankPositionY] = numberOfTank + 1;
                     if(movementCalculation(grid, numberOfTank) < distance){
@@ -747,7 +746,7 @@ function calculatingMove(numberOfTank){
             //  enemy movement up
             case UP:
                 tanksCopy[numberOfTank].tankPositionX--;
-                if(grid[tanksCopy[numberOfTank].tankPositionX][tanksCopy[numberOfTank].tankPositionY] == 0){
+                if(grid[tanksCopy[numberOfTank].tankPositionX][tanksCopy[numberOfTank].tankPositionY] == 0 || grid[tanksCopy[numberOfTank].tankPositionX][tanksCopy[numberOfTank].tankPositionY] == 1){
                     grid[tanksCopy[numberOfTank].tankPositionX+1][tanksCopy[numberOfTank].tankPositionY] = 0;
                     grid[tanksCopy[numberOfTank].tankPositionX][tanksCopy[numberOfTank].tankPositionY] = numberOfTank + 1;
                     if(movementCalculation(grid, numberOfTank) < distance){
@@ -762,7 +761,10 @@ function calculatingMove(numberOfTank){
                 break;   
         }
     }
-    console.log("tank number", numberOfTank, "have value",returnValue);
+    // console.log("tank number", numberOfTank, "have value",returnValue);
+    if(distance == 0){
+        return 0;
+    }
     return returnValue;
 }
 function shooting(currTank){
@@ -770,7 +772,7 @@ function shooting(currTank){
     // this checks if player tank is below or above enemy tank and if enemy tank is rotated down or up so it can shoot
     if(tanks[0].tankPositionY == tanks[currTank].tankPositionY){
         if(tanks[0].tankPositionX > tanks[currTank].tankPositionX && tanks[currTank].position == DOWN){
-            for (let index = tanks[currTank].tankPositionX+1; index < tanks[0].tankPositionX; index++) {
+            for (let index = tanks[currTank].tankPositionX+1; index <= tanks[0].tankPositionX; index++) {
                 if(gameContext[index][tanks[currTank].tankPositionY] != 0){
                     return 0;
                 }
@@ -778,18 +780,22 @@ function shooting(currTank){
             }
         }
         if(tanks[0].tankPositionX < tanks[currTank].tankPositionX && tanks[currTank].position == UP){
-            for (let index = tanks[0].tankPositionX+1; index < tanks[currTank].tankPositionX; index++) {
+            for (let index = tanks[0].tankPositionX; index <= tanks[currTank].tankPositionX; index++) {
                 if(gameContext[index][tanks[currTank].tankPositionY] != 0){
                     return 0;
                 }
                 counter++;
             }
         }
+        if(!counter){
+            if((gameContext[tanks[currTank].tankPositionX+1][tanks[currTank].tankPositionY]) == 1 || (gameContext[tanks[currTank].tankPositionX-1][tanks[currTank].tankPositionY]) == 1){
+                counter++;
+            }
     }
     // this checks if player tank is left or right of enemy tank and if enemy tank is rotated left or right so it can shoot
     if(tanks[0].tankPositionX == tanks[currTank].tankPositionX){
         if(tanks[0].tankPositionY > tanks[currTank].tankPositionY && tanks[currTank].position == RIGHT){
-            for (let index = tanks[currTank].tankPositionY+1; index < tanks[0].tankPositionY; index++) {
+            for (let index = tanks[currTank].tankPositionY+1; index <= tanks[0].tankPositionY; index++) {
                 if(gameContext[tanks[currTank].tankPositionX][index] != 0){
                     return 0;
                 }
@@ -797,14 +803,37 @@ function shooting(currTank){
             }
         }
         if(tanks[0].tankPositionY < tanks[currTank].tankPositionY && tanks[currTank].position == LEFT){
-            for (let index = tanks[0].tankPositionY+1; index < tanks[currTank].tankPositionY; index++) {
+            for (let index = tanks[0].tankPositionY; index <= tanks[currTank].tankPositionY; index++) {
                 if(gameContext[tanks[currTank].tankPositionX][index] != 0){
                     return 0;
                 }
                 counter++;
             }
-        }
+        }  
     }
     if(counter)
         return 1;
+    }
+}
+
+function lastStepRotation(tankIndex){
+    // this checks if player tank is below or above enemy tank and if enemy tank is rotated down or up so it can rotate
+    if(tanks[0].tankPositionX > tanks[tankIndex].tankPositionX){
+        gamescreen.drawImage(enemydown, tanks[tankIndex].tankPositionY*30, tanks[tankIndex].tankPositionX*30, TANKWIDTH, TANKHEIGHT);
+        return DOWN;
+    }
+    if(tanks[0].tankPositionX < tanks[tankIndex].tankPositionX){
+        gamescreen.drawImage(enemyup, tanks[tankIndex].tankPositionY*30, tanks[tankIndex].tankPositionX*30, TANKWIDTH, TANKHEIGHT);
+        return UP;
+    }
+
+    // this checks if player tank is left or right of enemy tank and if enemy tank is rotated left or right so it can rotate
+    if(tanks[0].tankPositionY > tanks[tankIndex].tankPositionY){
+        gamescreen.drawImage(enemyright, tanks[tankIndex].tankPositionY*30, tanks[tankIndex].tankPositionX*30, TANKWIDTH, TANKHEIGHT);
+        return RIGHT;
+    }
+    if(tanks[0].tankPositionY < tanks[tankIndex].tankPositionY){
+        gamescreen.drawImage(enemyleft, tanks[tankIndex].tankPositionY*30, tanks[tankIndex].tankPositionX*30, TANKWIDTH, TANKHEIGHT);
+        return LEFT;
+    }
 }
