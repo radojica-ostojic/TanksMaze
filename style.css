@@ -59,7 +59,7 @@ p {
   border-color: transparent;
   color: white;
   position: relative;
-  /* top: 150px; */
+  top: 20px;
   transition: background-color 1s;
   border-radius: 10px;
   padding-left: 10px;
