@@ -52,7 +52,23 @@ p {
   padding-left: 10px;
   padding-right: 10px;
 }
+#difficulty {
+  font-family: igrica;
+  font-size: 50px;
+  background-color: transparent;
+  border-color: transparent;
+  color: white;
+  position: relative;
+  /* top: 150px; */
+  transition: background-color 1s;
+  border-radius: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+select option { 
+  background-color: black;
 
+}
 #btn:hover {
   cursor: pointer;
   background-color: grey;

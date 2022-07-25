@@ -47,6 +47,8 @@ var currDistance;
 var nextDistance;
 var music = document.getElementById('track');
 var counter;
+var difficultCounter = 1;
+var difficulty = 3.5;
 
 const tank = {
     tankId : 0,
@@ -118,12 +120,19 @@ function moveit(e){
         }
     }
 }
-
+function difficult(){
+    selectElement = document.querySelector('#difficulty');
+    difficulty = selectElement.value;
+}
 // canvas creation
 function init() {
   hiding();
   dataInit();
   soundtrack();
+  if(difficultCounter){
+    difficult();
+    difficultCounter = 0;
+  }
   canvas = document.getElementById("canvas");
   gamescreen = canvas.getContext("2d");
   window.document.addEventListener('keydown', moveit, true);
@@ -156,9 +165,8 @@ function init() {
   
 
 //   function for moving enemy tank    
-tempoTimeVariable = setInterval(enemyMovement, SPEED*1.5);
+tempoTimeVariable = setInterval(enemyMovement, SPEED*difficulty);
 }
-  
 
 function redrawPlayer(){
     gameContext[tanks[0].tankPositionX][tanks[0].tankPositionY] = 1;
@@ -428,7 +436,7 @@ function bulletDrawing(bulletPosX, bulletPosY){
 // initialization of matrix and tanks starting locations
 function dataInit(){
     gameContext = [[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1], 
-                  [-1, 1, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1],
+                  [-1, 4, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1],
                   [-1, 0, -1, -1, -1, -1, -1, 0, -1, -1, -1, 0, -1, -1, -1, -1, 0, -1, -1, -1, 0, -1], 
                   [-1, 0, 0, 0, -1, 0, -1, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, -1, 0, 0, -1],
                   [-1, 0, -1, 0, -1, 0, 0, 0, 0, -1, -1, 0, -1, 0, -1, -1, -1, -1, -1, 0, 0, -1],
@@ -437,7 +445,7 @@ function dataInit(){
                   [-1, 0, -1, 0, 0, 0, -1, 0, -1, -1, -1, -1, 0, 0, 0, 0, 0, 0, -1, -1, -1, -1],
                   [-1, 0, 0, 0, 0, -1, -1, 0, -1, 0, 0, 0, 0, -1, -1, -1, -1, 0, -1, 0, 0, -1], 
                   [-1, -1, 0, -1, 0, -1, 0, 0, 0, 0, -1, -1, 0, -1, 0, 0, -1, 0, -1, -1, 0, -1],
-                  [-1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 4, -1, -1, -1, 0, 0, 0, -1, 0, -1],
+                  [-1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 1, -1, -1, -1, 0, 0, 0, -1, 0, -1],
                   [-1, 0, 0, -1, 0, -1, 0, -1, 0, -1, -1, -1, 0, 0, 0, 0, 0, -1, -1, -1, 0, -1], 
                   [-1, 0, -1, -1, -1, -1, -1, -1, 0, 0, 0, 0, 0, -1, -1, 0, -1, -1, 0, 0, 0, -1],
                   [-1, 0, -1, 0, 0, 0, -1, 0, 0, -1, -1, -1, -1, -1, 0, 0, -1, 0, 0, -1, 0, -1],
